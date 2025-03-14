@@ -1,0 +1,92 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - sonar-analysis
+  pull_request:
+    branches:
+      - sonar-analysis
+
+jobs:
+  analyze-code:
+    name: Run SonarQube Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Cache SonarQube Packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: Cache Maven Packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build project
+        run: mvn clean install -DskipTests=false
+
+      - name: Run Unit Tests
+        run: mvn test
+
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v3
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
+          args: >
+            -Dsonar.organization=your-org-name
+            -Dsonar.projectKey=your-project-key
+            -Dsonar.host.url=https://sonarcloud.io
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
+---
+## **3️⃣ Hướng dẫn tạo SONAR_TOKEN**
+Bạn có thể lấy `SONAR_TOKEN` từ SonarQube hoặc **SonarCloud** theo các bước sau:  
+
+### **A. Lấy `SONAR_TOKEN` từ SonarQube (Self-hosted)**
+1. Truy cập **SonarQube Server** của bạn (ví dụ: `http://your-sonarqube-server.com`)
+2. Đăng nhập vào tài khoản của bạn.
+3. Chọn **My Account** (Góc trên cùng bên phải)
+4. Chuyển đến tab **Security**  
+5. Trong phần **Tokens**, nhập mô tả và nhấn **Generate**.
+6. Sao chép token và **lưu lại ngay**, vì bạn chỉ có thể xem một lần!
+
+---
+
+### **B. Lưu `SONAR_TOKEN` vào GitHub Secrets**
+Để lưu giá trị `SONAR_TOKEN` một cách an toàn:  
+1. Truy cập **GitHub repository** của bạn.  
+2. Vào phần **Settings** → Chọn **Secrets and variables** → Click vào **Actions**.  
+3. Nhấn vào nút **New repository secret**.  
+4. Nhập tên secret là: `SONAR_TOKEN`.  
+5. Dán giá trị token mà bạn vừa copy vào phần **Secret**.  
+6. Nhấn **Add secret** để lưu lại.  
+
+🔥 **Lưu ý:**  
+Sau khi thêm vào **Secrets**, bạn **không thể xem lại** giá trị `SONAR_TOKEN`, nên nếu lỡ quên lưu, bạn phải xóa đi và tạo lại.  
+
+---
+
+## **3️⃣ Chạy CI/CD trên GitHub Actions**
+Sau khi đã có `SONAR_TOKEN` và sửa file workflow, bạn có thể **push nhánh `sonar-analysis` lên GitHub**, hệ thống sẽ tự động kích hoạt GitHub Actions.
+
+### **Push nhánh lên GitHub**
+```sh
+git add .  
+git commit -m "Thêm CI/CD chỉ chạy SonarQube"  
+git push origin sonar-analysis
