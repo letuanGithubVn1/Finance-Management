@@ -1,5 +1,4 @@
 # Ignore target folder
 **/target/
 
-# Ignore compiled class files
-**/*.class
+
