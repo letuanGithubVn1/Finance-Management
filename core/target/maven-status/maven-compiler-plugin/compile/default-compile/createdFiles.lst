@@ -1,0 +1,5 @@
+com\qlct\core\repository\UserRepository.class
+com\qlct\core\BeanPackageLogger.class
+com\qlct\core\entity\User.class
+com\qlct\core\entity\Category.class
+com\qlct\core\repository\CategoryRepository.class
