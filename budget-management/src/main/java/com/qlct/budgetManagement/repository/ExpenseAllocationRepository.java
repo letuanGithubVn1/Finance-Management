@@ -11,10 +11,10 @@
  *  org.springframework.data.repository.query.Param
  *  org.springframework.stereotype.Repository
  */
-package com.qlct.budgetmanagement.repository;
+package com.qlct.budgetManagement.repository;
 
-import com.qlct.budgetmanagement.entity.Budget;
-import com.qlct.budgetmanagement.entity.ExpenseAllocation;
+import com.qlct.budgetManagement.entity.Budget;
+import com.qlct.budgetManagement.entity.ExpenseAllocation;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;

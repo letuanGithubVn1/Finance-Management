@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.qlct.budgetmanagement.entity.Budget;
-import com.qlct.budgetmanagement.entity.ExpenseAllocation;
+import com.qlct.budgetManagement.entity.Budget;
+import com.qlct.budgetManagement.entity.ExpenseAllocation;
 
 import dto.request_DTO.ExpenseAllocationRequest;
 import lombok.AllArgsConstructor;

@@ -13,10 +13,10 @@
  *  jakarta.persistence.ManyToOne
  *  jakarta.persistence.Table
  */
-package com.qlct.budgetmanagement.entity;
+package com.qlct.budgetManagement.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.qlct.budgetmanagement.entity.Budget;
+import com.qlct.budgetManagement.entity.Budget;
 import com.qlct.core.entity.Category;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
