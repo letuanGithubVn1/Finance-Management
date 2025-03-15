@@ -3,11 +3,11 @@ name: SonarQube Analysis
 on:
   push:
     branches:
-      - sonar-analysis
+      - main
   workflow_dispatch:
   pull_request:
     branches:
-      - sonar-analysis
+      - main
 
 jobs:
   analyze-code:
