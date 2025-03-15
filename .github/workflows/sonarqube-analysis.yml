@@ -39,7 +39,10 @@ jobs:
 
       - name: Build project
         run: mvn clean install -DskipTests=false
-
+        
+      - name: Run Unit Tests
+        run: mvn test
+        
       # Thêm bước kiểm tra sự tồn tại của thư mục target/classes  
       - name: Check if target/classes exists  
         run: |  
@@ -49,10 +52,10 @@ jobs:
             echo "Directory target/classes does not exist."  
             exit 1  
           fi  
-
-      - name: Run Unit Tests
-        run: mvn test
-
+          
+      - name: List target directory  
+        run: ls -R main-app/target  
+        
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v3
         env:
