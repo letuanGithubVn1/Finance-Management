@@ -50,7 +50,7 @@ jobs:
         with:
           projectBaseDir: .
           args: >
-            -Dsonar.organization=letuanGithubVn1
+            -Dsonar.organization=letuangithubvn1
             -Dsonar.projectKey=letuanGithubVn1_Finance-Management
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
