@@ -39,10 +39,23 @@ jobs:
 
       - name: Build project
         run: mvn clean install -DskipTests=false
-
+        
       - name: Run Unit Tests
         run: mvn test
-
+        
+      # Thêm bước kiểm tra sự tồn tại của thư mục target/classes  
+      - name: Check if target/classes exists  
+        run: |  
+          if [ -d "main-app/target/classes" ]; then  
+            echo "Directory target/classes exists."  
+          else  
+            echo "Directory target/classes does not exist."  
+            exit 1  
+          fi  
+          
+      - name: List target directory  
+        run: ls -R main-app/target  
+        
       - name: SonarQube Scan
         uses: sonarsource/sonarqube-scan-action@v3
         env:
@@ -54,4 +67,5 @@ jobs:
             -Dsonar.projectKey=letuanGithubVn1_Finance-Management
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-            
+            -Dsonar.java.binaries=main-app/target/classes  
+
