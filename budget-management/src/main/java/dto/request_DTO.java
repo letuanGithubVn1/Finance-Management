@@ -11,6 +11,20 @@ import lombok.Data;
 @Data
 public class request_DTO {
 
+	
+	private static request_DTO instance;
+
+    private request_DTO() {
+    }
+
+    // Phương thức để lấy đối tượng duy nhất 
+    public static request_DTO getInstance() {
+        if (instance == null) {
+            instance = new request_DTO(); 
+        }
+        return instance;
+    }
+	
 	@Data
 	public static class BudgetRequest {
 	    private Long userId;

@@ -38,11 +38,7 @@ public class response_DTO {
 	        this.expenseAllocations = allocations.stream()
 	                .map(exp -> new ExpenseAllocationResponse(exp.getCategoryId(), exp.getAllocatedAmount()))
 	                .collect(Collectors.toList());
-	    }
-	    
-	    public BudgetResponse(String a, String b, Long c) {
-	    	
-	    }
+	    }	   
 	  
 	}
 

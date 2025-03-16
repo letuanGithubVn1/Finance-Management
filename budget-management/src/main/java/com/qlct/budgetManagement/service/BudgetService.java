@@ -24,6 +24,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BudgetService {
+	
+	private final String status_reps = "successfully";
+	private final String budget_reps = "Ngân sách không tồn tại";
+	
     @Autowired
     private BudgetRepository budgetRepository;
     @Autowired
@@ -67,12 +71,12 @@ public class BudgetService {
     }
 
     public Budget getBudgetById(Long budgetId, Long userId) {
-        return budgetRepository.findBudgetByIdAndUserId(budgetId, userId).orElseThrow(() -> new RuntimeException("Ngân sách không tồn tại"));
+        return budgetRepository.findBudgetByIdAndUserId(budgetId, userId).orElseThrow(() -> new RuntimeException(budget_reps));
     }
 
     @Transactional
     public BudgetStatusResponse updateBudget(Long budgetId, UpdateBudgetRequest request) {
-        Budget budget = budgetRepository.findById(budgetId).orElseThrow(() -> new RuntimeException("Ngân sách không tồn tại"));
+        Budget budget = budgetRepository.findById(budgetId).orElseThrow(() -> new RuntimeException(budget_reps));
         budget.setLimit_amount(request.getLimitAmount());
         budget.setStart_date(request.getStartDate());
         budget.setEnd_date(request.getEndDate());
@@ -90,27 +94,27 @@ public class BudgetService {
             existingAllocation.setAllocatedAmount(allocation.getAllocatedAmount());
             expenseAllocationRepository.save(existingAllocation);
         }
-        return new BudgetStatusResponse("Successfully", "Cập nhật thành công!", budgetId);
+        return new BudgetStatusResponse(status_reps, "Cập nhật thành công!", budgetId);
     }
 
     // Cần Test lại cách hoạt động
     @Transactional
     public BudgetStatusResponse deleteBudgetOrExpenseAllocations(Long budgetId, Long userId, List<Long> categoryIds) {
-        Budget budget = budgetRepository.findBudgetByIdAndUserId(budgetId, userId).orElseThrow(() -> new RuntimeException("Ngân sách không tồn tại"));
+        Budget budget = budgetRepository.findBudgetByIdAndUserId(budgetId, userId).orElseThrow(() -> new RuntimeException(budget_reps));
         if (categoryIds == null || categoryIds.isEmpty()) {
             expenseAllocationRepository.deleteByBudget(budget);
             budgetRepository.delete(budget);
-            BudgetStatusResponse budgetStatusResponse = new BudgetStatusResponse("Successfully", "Ngân sách được xóa thành công", budgetId);
+            BudgetStatusResponse budgetStatusResponse = new BudgetStatusResponse(status_reps, "Ngân sách được xóa thành công", budgetId);
             return budgetStatusResponse;
         }
         expenseAllocationRepository.deleteByBudgetAndCategoryIds(budget, categoryIds);
-        BudgetStatusResponse budgetStatusResponse = new BudgetStatusResponse("Successfully", "Đã xóa các danh mục trong ngân sách được xóa", budgetId);
+        BudgetStatusResponse budgetStatusResponse = new BudgetStatusResponse(status_reps, "Đã xóa các danh mục trong ngân sách được xóa", budgetId);
         return budgetStatusResponse;
     }
 
     @Transactional
     public BudgetStatusResponse addExpenseAllocations(Long budgetId, Long userId, ExpenseAllocationRequest request) {
-        Budget budget = budgetRepository.findBudgetByIdAndUserId(budgetId, userId).orElseThrow(() -> new RuntimeException("Ngân sách không tồn tại"));
+        Budget budget = budgetRepository.findBudgetByIdAndUserId(budgetId, userId).orElseThrow(() -> new RuntimeException(budget_reps));
         Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new RuntimeException("Danh mục không tồn tại"));
         Optional<ExpenseAllocation> existingAllocation = expenseAllocationRepository.findByBudgetIdAndCategoryId(budgetId, request.getCategoryId());
         if (existingAllocation.isPresent()) {
@@ -126,6 +130,6 @@ public class BudgetService {
             newAllocation.setCreated_at(LocalDateTime.now());
             expenseAllocationRepository.save(newAllocation);
         }
-        return new BudgetStatusResponse("Successfully", "Thêm danh mục của ngân sách thành công", budgetId);
+        return new BudgetStatusResponse(status_reps, "Thêm danh mục của ngân sách thành công", budgetId);
     }
 }
