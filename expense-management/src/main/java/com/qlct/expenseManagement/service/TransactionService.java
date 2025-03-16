@@ -47,8 +47,7 @@ public class TransactionService {
         transaction.setCreated_at(LocalDateTime.now());
         transactionRepository.save(transaction);
         
-        TransactionStatusResponse transactionStatusResponse = new TransactionStatusResponse("successfully", "Giao dịch thành công", userId);
-        return transactionStatusResponse;
+        return new TransactionStatusResponse("successfully", "Giao dịch thành công", userId);
     }
 
     public List<Transaction> getTransactionsByUser(Long userId) {

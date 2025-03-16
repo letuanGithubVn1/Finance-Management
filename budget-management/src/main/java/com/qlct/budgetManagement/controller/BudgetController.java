@@ -3,7 +3,9 @@ package com.qlct.budgetManagement.controller;
 import com.qlct.budgetManagement.entity.Budget;
 import com.qlct.budgetManagement.service.BudgetService;
 import dto.request_DTO;
+import dto.request_DTO.BudgetRequest;
 import dto.response_DTO;
+import dto.response_DTO.BudgetStatusResponse;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +28,10 @@ public class BudgetController {
     private BudgetService budgetService;
 
     @PostMapping
-    public ResponseEntity<String> createBudget(@RequestBody @Validated request_DTO.BudgetRequest request) {
+    public ResponseEntity<BudgetStatusResponse> createBudget(@RequestBody @Validated BudgetRequest request) {
         budgetService.createBudget(request);
-        return ResponseEntity.ok("tạo ngân sách thành công");
+        BudgetStatusResponse budgetStatusReps = new BudgetStatusResponse("Successfully", "Tạo ngân sách thành công!", request.getBudgetId());
+        return ResponseEntity.ok(budgetStatusReps);
     }
 
     @GetMapping
