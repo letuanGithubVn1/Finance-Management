@@ -1,4 +1,6 @@
 # Ignore target folder
 **/target/
 
+# Ignore file txt
+*.txt
 

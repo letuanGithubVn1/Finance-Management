@@ -38,7 +38,7 @@ public class BudgetService {
         User user = userRepository.findById(request.getUserId()).orElseThrow(() -> new RuntimeException("Người dùng không tồn tại"));
         BigDecimal totalAllocated = request.getExpenseAllocations().stream().map(ExpenseAllocationRequest::getAllocatedAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         if (totalAllocated.compareTo(request.getLimitAmount()) > 0) {
-            throw new RuntimeException("tổng tiền danh mục vượt ngân sách tổng");
+            throw new IllegalArgumentException("Tổng tiền danh mục vượt ngân sách tổng");
         }
         Budget budget = new Budget();
         budget.setUser(user);

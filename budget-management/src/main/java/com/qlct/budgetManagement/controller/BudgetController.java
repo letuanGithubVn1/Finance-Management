@@ -53,7 +53,7 @@ public class BudgetController {
 
     @DeleteMapping(value={"/{budgetId}"})
     public ResponseEntity<?> deleteBudgetOrCategories(@PathVariable Long budgetId, @RequestParam Long userId, @RequestParam(required=false) List<Long> categoryIds) {
-//        System.out.print(categoryIds);
+//        System.out.print(categoryIds); // NOSONAR
         response_DTO.BudgetStatusResponse response = budgetService.deleteBudgetOrExpenseAllocations(budgetId, userId, categoryIds);
         return ResponseEntity.ok((Object)response);
     }
