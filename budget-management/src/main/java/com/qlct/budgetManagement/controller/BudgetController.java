@@ -1,26 +1,3 @@
-/*
- * Decompiled with CFR 0.152.
- * 
- * Could not load the following classes:
- *  com.qlct.budgetmanagement.entity.Budget
- *  com.qlct.budgetmanagement.service.BudgetService
- *  dto.request_DTO$BudgetRequest
- *  dto.request_DTO$ExpenseAllocationRequest
- *  dto.request_DTO$UpdateBudgetRequest
- *  dto.response_DTO$BudgetStatusResponse
- *  org.springframework.beans.factory.annotation.Autowired
- *  org.springframework.http.ResponseEntity
- *  org.springframework.validation.annotation.Validated
- *  org.springframework.web.bind.annotation.DeleteMapping
- *  org.springframework.web.bind.annotation.GetMapping
- *  org.springframework.web.bind.annotation.PathVariable
- *  org.springframework.web.bind.annotation.PostMapping
- *  org.springframework.web.bind.annotation.PutMapping
- *  org.springframework.web.bind.annotation.RequestBody
- *  org.springframework.web.bind.annotation.RequestMapping
- *  org.springframework.web.bind.annotation.RequestParam
- *  org.springframework.web.bind.annotation.RestController
- */
 package com.qlct.budgetManagement.controller;
 
 import com.qlct.budgetManagement.entity.Budget;
@@ -73,7 +50,7 @@ public class BudgetController {
 
     @DeleteMapping(value={"/{budgetId}"})
     public ResponseEntity<?> deleteBudgetOrCategories(@PathVariable Long budgetId, @RequestParam Long userId, @RequestParam(required=false) List<Long> categoryIds) {
-        System.out.print(categoryIds);
+//        System.out.print(categoryIds);
         response_DTO.BudgetStatusResponse response = budgetService.deleteBudgetOrExpenseAllocations(budgetId, userId, categoryIds);
         return ResponseEntity.ok((Object)response);
     }
