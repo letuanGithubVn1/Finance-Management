@@ -29,6 +29,7 @@
 	    </developer>
 	</developers>
 	
+	<!-- SonarQube: ignore this commented out code in pom.xml -->  
 	<!-- <properties>
 		<java.version>17</java.version>
 		<spring-ai.version>1.0.0-M6</spring-ai.version>
@@ -109,6 +110,8 @@
 	</modules>
 
 	<build>
+	
+	 <!-- SonarQube: ignore this commented out code in pom.xml -->  
 	 <!-- 	<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

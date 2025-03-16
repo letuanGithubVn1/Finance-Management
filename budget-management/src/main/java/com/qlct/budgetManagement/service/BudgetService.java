@@ -25,8 +25,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class BudgetService {
 	
-	private final String status_reps = "successfully";
-	private final String budget_reps = "Ngân sách không tồn tại";
+	private static final String status_reps = "successfully";
+	private static final String budget_reps = "Ngân sách không tồn tại";
 	
     @Autowired
     private BudgetRepository budgetRepository;
@@ -108,8 +108,7 @@ public class BudgetService {
             return budgetStatusResponse;
         }
         expenseAllocationRepository.deleteByBudgetAndCategoryIds(budget, categoryIds);
-        BudgetStatusResponse budgetStatusResponse = new BudgetStatusResponse(status_reps, "Đã xóa các danh mục trong ngân sách được xóa", budgetId);
-        return budgetStatusResponse;
+        return new BudgetStatusResponse(status_reps, "Đã xóa các danh mục trong ngân sách được xóa", budgetId);
     }
 
     @Transactional
