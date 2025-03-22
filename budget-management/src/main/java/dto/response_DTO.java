@@ -44,7 +44,7 @@ public class response_DTO {
         public BudgetStatusResponse(String status, String message, Long budgetId) {
         	this.status = status;
             this.message = message;
-            this.budgetId = null;
+            this.budgetId = budgetId;
         }
     }
 
