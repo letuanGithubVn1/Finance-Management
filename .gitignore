@@ -4,3 +4,5 @@
 # Ignore file txt
 *.txt
 
+# Ignore file .project
+*.project

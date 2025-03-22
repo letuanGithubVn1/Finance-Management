@@ -35,17 +35,17 @@ public class response_DTO {
 	}	
 	
 	@Data
-    @AllArgsConstructor
+//    @AllArgsConstructor
     public static class BudgetStatusResponse {
         private String status;
         private String message;
         private Long budgetId;
         
-//        public BudgetStatusResponse(String status, String message, Long budgetId) {
-//        	this.status = status;
-//        	this.message = message;
-//        	this.budgetId = budgetId;
-//        }
+        public BudgetStatusResponse(String status, String message, Long budgetId) {
+        	this.status = status;
+            this.message = message;
+            this.budgetId = null;
+        }
     }
 
 
