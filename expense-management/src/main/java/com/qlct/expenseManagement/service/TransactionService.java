@@ -62,7 +62,7 @@ public class TransactionService {
 //            transaction.setNote(transactionDetails.getNote());
 //            return transactionRepository.save(transaction);
 //        }).orElseThrow(() -> new RuntimeException("Transaction not found"));
-//    }
+//    } //NOSONAR
     
     public Transaction updateTransaction (Long id, Transaction transaction) {
     	return transactionRepository.findById(id)

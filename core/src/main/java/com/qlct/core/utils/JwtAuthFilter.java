@@ -20,13 +20,10 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
   private final JwtTokenUtil jwtUtil;
-//  private final AuthenticationManager authenticationManager;
   private final UserDetailsServiceImpl userDetailService;
 
-  public JwtAuthFilter(JwtTokenUtil jwtUtil,
-		  				UserDetailsServiceImpl userDetailService) {
+  public JwtAuthFilter(JwtTokenUtil jwtUtil, UserDetailsServiceImpl userDetailService) {
     this.jwtUtil = jwtUtil;
-//    this.authenticationManager = authenticationManager;
     this.userDetailService = userDetailService;
   }
 

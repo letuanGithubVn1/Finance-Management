@@ -3,6 +3,7 @@ package com.qlct.core.configuration;
 import com.qlct.core.utils.JwtTokenUtil;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -41,20 +42,20 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
         this.restTemplate = restTemplate;
         this.jwtUtil = jwtUtil;
     }
-
+   
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String authorizationCode = (String) authentication.getCredentials();
 
         // Exchange authorization code for Google tokens
-        ResponseEntity<Map> response = exchangeAuthCodeForTokens(authorizationCode);
+        ResponseEntity<Map<String, Object>> response = exchangeAuthCodeForTokens(authorizationCode);
+        
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
             throw new RuntimeException("Failed to retrieve access token from Google");
         }
 
         Map<String, Object> tokenData = response.getBody();
         String googleAccessToken = (String) tokenData.get("access_token");
-        String googleRefreshToken = (String) tokenData.get("refresh_token");
 
         // Fetch user info from Google
         Map<String, Object> userInfo = fetchGoogleUserInfo(googleAccessToken);
@@ -71,30 +72,23 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
         return new UsernamePasswordAuthenticationToken(user, ourAccessToken, user.getAuthorities());
     }
 
-    private ResponseEntity<Map> exchangeAuthCodeForTokens(String authorizationCode) {
+    
+    private ResponseEntity<Map<String, Object>> exchangeAuthCodeForTokens(String authorizationCode) {
         String tokenUrl = "https://oauth2.googleapis.com/token";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        System.out.println("redirectUri");
-        
-//        String requestBody = "code=" + authorizationCode +
-//                "&client_id=" + clientId +
-//                "&client_secret=" + clientSecret +
-//                "&redirect_uri=" + redirectUri +
-//                "&grant_type=authorization_code";
-        
-        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
-        requestBody.add("code", authorizationCode);
-        requestBody.add("client_id", clientId);
-        requestBody.add("client_secret", clientSecret);
-        requestBody.add("redirect_uri", redirectUri);
-        requestBody.add("grant_type", "authorization_code");
+	    MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+	    requestBody.add("code", authorizationCode);
+	    requestBody.add("client_id", clientId);
+	    requestBody.add("client_secret", clientSecret);
+	    requestBody.add("redirect_uri", redirectUri);
+	    requestBody.add("grant_type", "authorization_code");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(requestBody, headers);
 
-//        HttpEntity<String> request = new HttpEntity<>(requestBody, headers);
-        return restTemplate.exchange(tokenUrl, HttpMethod.POST, request, Map.class);
+        // Đảm bảo kiểu trả về là Map<String, Object>
+        return restTemplate.exchange(tokenUrl, HttpMethod.POST, request, new ParameterizedTypeReference<Map<String, Object>>() {});
     }
 
     private Map<String, Object> fetchGoogleUserInfo(String accessToken) {
@@ -103,12 +97,51 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
         headers.setBearerAuth(accessToken);
         HttpEntity<String> request = new HttpEntity<>(headers);
 
-        ResponseEntity<Map> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, request, Map.class);
+        // Cập nhật kiểu trả về là Map<String, Object>
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, request, new ParameterizedTypeReference<Map<String, Object>>() {});
+        
+        Map<String, Object> userInfo = response.getBody();
+         
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 
+    
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

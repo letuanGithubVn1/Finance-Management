@@ -63,15 +63,6 @@ public class JwtTokenUtil {
     return claims.getSubject();
   }
   
-  private Claims extractAllClaims(String token) {
-      return Jwts
-              .parserBuilder()
-              .setSigningKey(getSigningKey())
-              .build()
-              .parseClaimsJws(token)
-              .getBody();
-  }
-
   public boolean isRefreshToken(String token) {
       Claims claims = Jwts.parserBuilder()
               .setSigningKey(getSigningKey())
