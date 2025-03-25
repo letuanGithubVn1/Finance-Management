@@ -13,7 +13,6 @@ import com.qlct.core.utils.JwtTokenUtil;
 
 @Service
 public class AuthService {
-    private static final String CLIENT_ID = "628699798870-p013clvunvq6dj7shmkj72ojs6q1ffdg.apps.googleusercontent.com"; // Thay thế với CLIENT_ID của bạn
     private final AuthenticationManager authenticationManager;
     private final JwtTokenUtil jwtUtil;
     

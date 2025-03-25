@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.qlct.core.dto.LoginRequest;
 import com.qlct.core.dto.LoginResponse;
 import com.qlct.core.service.AuthService;

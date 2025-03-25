@@ -19,7 +19,10 @@ import lombok.Data;
 @Data
 @Table(name = "users") // Nhớ ánh xạ cùng tên với DB
 public class User implements UserDetails{
-    @Id
+
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "u_id") // ánh xạ DB
     private Long id;

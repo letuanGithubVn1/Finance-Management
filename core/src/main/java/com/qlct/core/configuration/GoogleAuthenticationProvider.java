@@ -99,9 +99,7 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
 
         // Cập nhật kiểu trả về là Map<String, Object>
         ResponseEntity<Map<String, Object>> response = restTemplate.exchange(userInfoUrl, HttpMethod.GET, request, new ParameterizedTypeReference<Map<String, Object>>() {});
-        
-        Map<String, Object> userInfo = response.getBody();
-         
+                
         return response.getStatusCode() == HttpStatus.OK ? response.getBody() : null;
     }
 

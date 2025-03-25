@@ -29,19 +29,18 @@ public class SecurityConfig {
   } 
   
   @Bean
-  public AuthenticationManager authenticationManager() {
+  AuthenticationManager authenticationManager() {
       return new ProviderManager(emailPasswordAuthenticationProvider, googleAuthenticationProvider);
   }
 
   @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+  SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
         .csrf(csrf -> csrf.disable())  // Disable CSRF for API
         .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) 
         .authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/auth/**").permitAll()
             .anyRequest().authenticated()) 
-//        .userDetailsService(userDetailsService)
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // Add JWT filter
         .build();
   }

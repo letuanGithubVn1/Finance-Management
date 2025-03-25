@@ -4,6 +4,7 @@ package com.qlct.core.utils;
 import java.security.Key;
 import java.util.Date;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -19,7 +20,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtTokenUtil {
 
-  private final String SECRET_KEY = "357638792F423F4428472B4B6250655368566D597133743677397A2443264D5971337436773976294B6250655368566D597133";
+  @Value("${jwt_secret_key}")
+  private String SECRET_KEY;
   private final long EXPIRATION_TIME_TOKEN = System.currentTimeMillis() +1000*60 ; // 1 phút
   private final long EXPIRATION_TIME_REFRESH_TOKEN = System.currentTimeMillis() +1000*60*60*24*7; // 7 ngày
 
