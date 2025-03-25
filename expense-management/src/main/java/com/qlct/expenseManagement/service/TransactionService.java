@@ -54,14 +54,26 @@ public class TransactionService {
         return transactionRepository.findByUserId(userId);
     }
 
-    public Transaction updateTransaction(Long id, Transaction transactionDetails) {
-        return transactionRepository.findById(id).map(transaction -> {
-            transaction.setAmount(transactionDetails.getAmount());
-            transaction.setPayment_type(transactionDetails.getPayment_type());
-            transaction.setTransaction_date(transactionDetails.getTransaction_date());
-            transaction.setNote(transactionDetails.getNote());
-            return transactionRepository.save(transaction);
-        }).orElseThrow(() -> new RuntimeException("Transaction not found"));
+//    public Transaction updateTransaction(Long id, Transaction transactionDetails) {
+//        return transactionRepository.findById(id).map(transaction -> {
+//            transaction.setAmount(transactionDetails.getAmount());
+//            transaction.setPayment_type(transactionDetails.getPayment_type());
+//            transaction.setTransaction_date(transactionDetails.getTransaction_date());
+//            transaction.setNote(transactionDetails.getNote());
+//            return transactionRepository.save(transaction);
+//        }).orElseThrow(() -> new RuntimeException("Transaction not found"));
+//    }
+    
+    public Transaction updateTransaction (Long id, Transaction transaction) {
+    	return transactionRepository.findById(id)
+                .map(t -> {
+                    t.setAmount(transaction.getAmount());
+                    t.setPayment_type(transaction.getPayment_type());
+                    t.setTransaction_date(transaction.getTransaction_date());
+                    t.setNote(transaction.getNote());
+                    return transactionRepository.save(t);
+                })
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
     }
 
     public void deleteTransaction(Long id) {

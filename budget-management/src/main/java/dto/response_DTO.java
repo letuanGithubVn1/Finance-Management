@@ -46,6 +46,9 @@ public class response_DTO {
             this.message = message;
             this.budgetId = budgetId;
         }
+        
+ 
+        
     }
 
 

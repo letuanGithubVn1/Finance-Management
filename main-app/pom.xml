@@ -23,7 +23,7 @@
             <artifactId>expense-management</artifactId>
             <version>1.0.0</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>Phat-trien-phan-mem</groupId>
             <artifactId>core</artifactId>
             <version>1.0.0</version>
@@ -45,7 +45,7 @@
 		    <groupId>org.springdoc</groupId>
 		    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 		</dependency>
-		 <dependency>
+		<dependency>
 	        <groupId>org.springframework.boot</groupId>
 	        <artifactId>spring-boot-starter</artifactId>
 	    </dependency>

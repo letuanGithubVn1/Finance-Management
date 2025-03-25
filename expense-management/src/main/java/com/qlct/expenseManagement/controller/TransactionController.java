@@ -42,12 +42,14 @@ public class TransactionController {
         return transactionService.getTransactionsByUser(userId);
     }
 
+    // Cập nhật Transaction 
     @PutMapping("/{id}")
     public Transaction updateTransaction(@PathVariable Long id,
     									 @RequestBody Transaction transactionDetails) {
         return transactionService.updateTransaction(id, transactionDetails);
     }
-
+    
+    // Xóa Transaction theo id
     @DeleteMapping("/{id}")
     public void deleteTransaction(@PathVariable Long id) {
         transactionService.deleteTransaction(id);

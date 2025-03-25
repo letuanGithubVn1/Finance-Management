@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 @ComponentScan(basePackages = {
 	    "mainApplication",
 	    "com.qlct.budgetmanagement",
-	    "com.qlct.expenseManagement"
+	    "com.qlct.expenseManagement",
+	    "com.qlct.core"
 	})
 @EnableJpaRepositories(basePackages = {
 	    "com.qlct.budgetmanagement.repository",
