@@ -22,7 +22,7 @@ public class JwtTokenUtil {
 
   @Value("${jwt_secret_key}")
   private String secretKey;
-  private static final String tokenType = "TOKEN_TYPE"; 
+  private static final String TOKEN_TYPE  = "TOKEN_TYPE"; 
   private final long expirationTimeToken = System.currentTimeMillis() +1000*60 ; // 1 phút
   private final long expirationTimerefreshToken = System.currentTimeMillis() +1000*60*60*24*7; // 7 ngày
 
@@ -32,7 +32,7 @@ public class JwtTokenUtil {
 
     String token = Jwts.builder()
         .setSubject(username)
-        .claim(tokenType, "TOKEN_ACCESS")
+        .claim(TOKEN_TYPE, "TOKEN_ACCESS")
         .setIssuedAt(now)
         .setExpiration(expiryDate)
         .signWith(getSigningKey(), SignatureAlgorithm.HS512)
@@ -44,7 +44,7 @@ public class JwtTokenUtil {
   public String generateRefreshToken(String username) {
       return Jwts.builder()
               .setSubject(username)
-              .claim(tokenType, "TOKEN_REFRESH")
+              .claim(TOKEN_TYPE, "TOKEN_REFRESH")
               .setIssuedAt(new Date())
               .setExpiration(new Date(expirationTimerefreshToken))
               .signWith(getSigningKey(), SignatureAlgorithm.HS512)
@@ -72,7 +72,7 @@ public class JwtTokenUtil {
               .build()
               .parseClaimsJws(token)
               .getBody();
-      return "TOKEN_REFRESH".equals(claims.get(tokenType));
+      return "TOKEN_REFRESH".equals(claims.get(TOKEN_TYPE));
   }
   
   public boolean validateToken(String token) {
