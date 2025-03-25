@@ -21,13 +21,13 @@ import io.jsonwebtoken.security.Keys;
 public class JwtTokenUtil {
 
   @Value("${jwt_secret_key}")
-  private String SECRET_KEY;
-  private final long EXPIRATION_TIME_TOKEN = System.currentTimeMillis() +1000*60 ; // 1 phút
-  private final long EXPIRATION_TIME_REFRESH_TOKEN = System.currentTimeMillis() +1000*60*60*24*7; // 7 ngày
+  private String secretKey;
+  private final long expirationTimeToken = System.currentTimeMillis() +1000*60 ; // 1 phút
+  private final long expirationTimerefreshToken = System.currentTimeMillis() +1000*60*60*24*7; // 7 ngày
 
   public String generateToken(String username) {
     Date now = new Date();
-    Date expiryDate = new Date(now.getTime() + EXPIRATION_TIME_TOKEN);
+    Date expiryDate = new Date(now.getTime() + expirationTimeToken);
 
     String token = Jwts.builder()
         .setSubject(username)
@@ -45,13 +45,13 @@ public class JwtTokenUtil {
               .setSubject(username)
               .claim("TOKEN_TYPE", "TOKEN_REFRESH")
               .setIssuedAt(new Date())
-              .setExpiration(new Date(EXPIRATION_TIME_REFRESH_TOKEN))
+              .setExpiration(new Date(expirationTimerefreshToken))
               .signWith(getSigningKey(), SignatureAlgorithm.HS512)
               .compact();
   }
   
   private Key getSigningKey() {
-      byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
+      byte[] keyBytes = Decoders.BASE64.decode(secretKey);
       return Keys.hmacShaKeyFor(keyBytes);
   }
   

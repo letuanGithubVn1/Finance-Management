@@ -31,9 +31,7 @@ public class AuthService {
         String accessToken = jwtUtil.generateToken(authenticatedUser.getName());
         String refreshToken = jwtUtil.generateRefreshToken(authenticatedUser.getName());
 
-        LoginResponse loginResponse = new LoginResponse(accessToken, refreshToken);
-
-        return loginResponse;
+        return new LoginResponse(accessToken, refreshToken);
     }
 	
 	// login với google
