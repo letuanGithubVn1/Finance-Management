@@ -10,6 +10,8 @@ import com.qlct.core.dto.LoginRequest;
 import com.qlct.core.dto.LoginResponse;
 import com.qlct.core.utils.JwtTokenUtil;
 
+import exception.GoogleApiException;
+
 
 @Service
 public class AuthService {
@@ -31,19 +33,25 @@ public class AuthService {
         String accessToken = jwtUtil.generateToken(authenticatedUser.getName());
         String refreshToken = jwtUtil.generateRefreshToken(authenticatedUser.getName());
 
-        return new LoginResponse(accessToken, refreshToken);
+        return new LoginResponse("Đăng nhập thành công!", accessToken, refreshToken);
     }
 	
-	// login với google
+	 // login với google
 	 public LoginResponse loginWithGoogle(String authorizationCode) {
-        Authentication authentication = new UsernamePasswordAuthenticationToken(null, authorizationCode);
-        Authentication authenticatedUser = authenticationManager.authenticate(authentication);
+        try {
+        	Authentication authentication = new UsernamePasswordAuthenticationToken(null, authorizationCode);
+            Authentication authenticatedUser = authenticationManager.authenticate(authentication);
 
-        String accessToken = jwtUtil.generateToken(authenticatedUser.getName());
-        String refreshToken = jwtUtil.generateRefreshToken(authenticatedUser.getName());
+            String accessToken = jwtUtil.generateToken(authenticatedUser.getName());
+            String refreshToken = jwtUtil.generateRefreshToken(authenticatedUser.getName());
 
-        return new LoginResponse(accessToken, refreshToken);
-    }
+            return new LoginResponse("Đăng nhập thành công!", accessToken, refreshToken);
+		} catch (GoogleApiException e) {
+	        return new LoginResponse("Lỗi khi xác thực với Google", null, null);
+	    } catch (Exception e) {
+	        return new LoginResponse("Lỗi khi xác thực với Google", null, null);
+	    }
+	 }
 }
 
 

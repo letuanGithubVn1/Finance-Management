@@ -2,6 +2,9 @@ package com.qlct.core.configuration;
 
 import com.qlct.core.utils.JwtTokenUtil;
 
+import exception.GoogleApiException;
+import io.jsonwebtoken.io.IOException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -18,6 +21,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
@@ -42,7 +46,62 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
         this.restTemplate = restTemplate;
         this.jwtUtil = jwtUtil;
     }
-   
+ 
+// Cách giúp kiểm tra dữ liệu đầu vào và xử lý ngoại lệ chi tiết, nhưng sẽ giảm hiệu suất
+//    @Override
+//    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//        String authorizationCode = (String) authentication.getCredentials();
+//
+//        if (authorizationCode == null || authorizationCode.isEmpty()) {
+//            throw new GoogleApiException("Mã xác thực không hợp lệ!");
+//        }
+//
+//        try {
+//            // Gọi API để đổi Authorization Code thành Access Token
+//            ResponseEntity<Map<String, Object>> response = exchangeAuthCodeForTokens(authorizationCode);
+//            
+//            // Kiểm tra phản hồi từ Google API
+//            if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
+//                throw new GoogleApiException("Đổi giấy phép với token thất bại!");
+//            }
+//
+//            Map<String, Object> tokenData = response.getBody();
+//            String googleAccessToken = (String) tokenData.get("access_token");
+//
+//            if (googleAccessToken == null || googleAccessToken.isEmpty()) {
+//                throw new GoogleApiException("Không nhận được access token từ Google.");
+//            }
+//
+//            // Lấy thông tin người dùng từ Google
+//            Map<String, Object> userInfo = fetchGoogleUserInfo(googleAccessToken);
+//            
+//            if (userInfo == null || userInfo.isEmpty()) {
+//                throw new GoogleApiException("Lấy thông tin người dùng từ Google thất bại!");
+//            }
+//
+//            String email = (String) userInfo.get("email");
+//            if (email == null || email.isEmpty()) {
+//                throw new GoogleApiException("Không tìm thấy email của người dùng.");
+//            }
+//
+//            // Tạo JWT token của chúng ta
+//            String ourAccessToken = jwtUtil.generateToken(email);
+//
+//            User user = new User(email, "", Collections.emptyList());
+//            return new UsernamePasswordAuthenticationToken(user, ourAccessToken, user.getAuthorities());
+//            
+//        } catch (HttpClientErrorException e) {
+//            throw new GoogleApiException("Lỗi từ phía client: " + e.getMessage());
+//        } catch (IOException e) {
+//            throw new GoogleApiException("Lỗi kết nối mạng: " + e.getMessage());
+//        } catch (Exception e) {
+//            throw new GoogleApiException("Lỗi không xác định: " + e.getMessage());
+//        }
+//    } //NOSONAR
+    
+    
+// Ngược lại với mã code trên. Mã code này tăng hiệu suất, nhưng kiểm tra và xử lý ngoại lệ đơn giản
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         String authorizationCode = (String) authentication.getCredentials();
@@ -51,7 +110,7 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
         ResponseEntity<Map<String, Object>> response = exchangeAuthCodeForTokens(authorizationCode);
         
         if (response.getStatusCode() != HttpStatus.OK || response.getBody() == null) {
-            throw new RuntimeException("Failed to retrieve access token from Google");
+            throw new GoogleApiException("Đổi giấy phép lấy token thất bại!");
         }
 
         Map<String, Object> tokenData = response.getBody();
@@ -60,7 +119,7 @@ public class GoogleAuthenticationProvider implements AuthenticationProvider {
         // Fetch user info from Google
         Map<String, Object> userInfo = fetchGoogleUserInfo(googleAccessToken);
         if (userInfo == null) {
-            throw new RuntimeException("Failed to retrieve user info from Google");
+            throw new GoogleApiException("Lấy thông tin người dùng từ Google thất bại!");
         }
 
         String email = (String) userInfo.get("email");
